@@ -1,0 +1,25 @@
+# Turn on URL rewriting
+RewriteEngine On
+
+# Installation directory
+RewriteBase /
+
+# Protect hidden files from being viewed
+<Files .*>
+	Order Deny,Allow
+	Deny From All
+</Files>
+
+# Allow direct access to the static files,
+# if the file does not exists it will prevent another round trip to the application
+RewriteRule ^(?:static|media|assets|guide-media)\b.* - [L]
+
+# Protect application and system files from being viewed
+RewriteRule .* index.php [PT]
+
+# Allow any files or directories that exist to be displayed directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite all other URLs to index.php/URL
+RewriteRule .* index.php/$0 [PT]
